@@ -72,13 +72,39 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		String code = "";
+		String message = "";
+ 
+		String account = request.getParameter("account");
+		String password = request.getParameter("password");
+		System.out.println(account + ";" + password);
+ 
+		Connection connect = DBManager.getConnect();
+		try {
+			Statement statement = connect.createStatement();
+			String sql = "select userAccount from " + DBManager.TABLE_UserLogin + " where userAccount='" + account + "'";
+			ResultSet result = statement.executeQuery(sql);
+			if (result.next()) { 
+				code = "100";
+				message = "the account has been there";
+			} else {
+				String sqlInsert = "insert into " + DBManager.TABLE_UserLogin + "(userAccount, userPassword) values('"
+						+ account + "', '" + password + "')";
+				if (statement.executeUpdate(sqlInsert) > 0) {
+					code = "200";
+					message = "success";
+				} else {
+					code = "300";
+					message = "falied";
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+ 
+		response.getWriter().append("code:").append(code).append(";message:").append(message);
 	}
-	@Override
-	public void destroy() {
-		System.out.println("RegisterServlet destory.");
-		super.destroy();
-	}
+
 
 	
 }

@@ -31,6 +31,9 @@ public class RoutineServlet extends HttpServlet {
 		if ("GET".equals(method)) {
 			doGet(request, response);
 		} 
+		if ("POST".equals(method)) {
+			doPost(request, response);
+		} 
 	}
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

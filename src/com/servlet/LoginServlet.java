@@ -42,7 +42,6 @@ public class LoginServlet extends HttpServlet {
 				code = "200";
 				message = "login successfully";
 			} else {
- 
 				code = "100";
 				message = "login failed";
 			}
@@ -58,13 +57,34 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String account;
-		String password;
-		account = request.getParameter("account");
-		password = request.getParameter("password"); 
-		
-		// œÏ”¶
-		response.getWriter().append("account: ").append(account).append("\npassword:").append(password);
+
+
+		String code = "";
+		String message = "";
+ 
+		String account = request.getParameter("userAccount");
+		String password = request.getParameter("userPassword");
+		System.out.println(account + ";" + password);
+ 
+		Connection connect = DBManager.getConnect();
+		try {
+			Statement statement = connect.createStatement();
+			String sql = "select userAccount from " + DBManager.TABLE_UserLogin + " where userAccount='" + account
+					+ "' and userPassword='" + password + "'";
+			ResultSet result = statement.executeQuery(sql);
+			if (result.next()) {
+				code = "200";
+				message = "login successfully";
+			} else {
+ 
+				code = "100";
+				message = "login failed";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		response.getWriter().append("code:").append(code).append(";message:").append(message);
+
 	}
 
 	
