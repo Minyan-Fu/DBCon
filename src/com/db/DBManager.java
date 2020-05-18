@@ -7,6 +7,7 @@ public class DBManager {
 	public static final String TABLE_UserLogin = "userlog";
 	public static final String TABLE_Device = "device";
 	public static final String TABLE_Routine = "routine";
+	public static final String TABLE_Record = "record";
 	
  
     public static Connection getConnect() {

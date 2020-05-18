@@ -18,6 +18,14 @@
   	<servlet-name>RoutineServlet</servlet-name>
   	<servlet-class>com.servlet.RoutineServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>idGetServlet</servlet-name>
+  	<servlet-class>com.servlet.idGetServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>showRoutineServlet</servlet-name>
+  	<servlet-class>com.servlet.showRoutineServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
@@ -29,11 +37,19 @@
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>DeviceServlet</servlet-name>
-  	<url-pattern>/DeviceServlett</url-pattern>
+  	<url-pattern>/DeviceServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>RoutineServlet</servlet-name>
   	<url-pattern>/RoutineServlet</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+  	<servlet-name>idGetServlet</servlet-name>
+  	<url-pattern>/idGetServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>showRoutineServlet</servlet-name>
+  	<url-pattern>/showRoutineServlet</url-pattern>
   </servlet-mapping>
   
   

@@ -3,8 +3,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.db.DBManager;
+import com.mysql.cj.protocol.Resultset;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
+import com.mysql.cj.xdevapi.Result;
+
+import net.sf.json.JSONObject;
 
 public class DeviceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,38 +41,38 @@ public class DeviceServlet extends HttpServlet {
 	}
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String code = "";
-		String message = "";
+		System.out.println("do get method start");
+		String sent ="";
+		String sent2 ="";
+		Connection connect = null;
+	    Statement statement = null;
+	    ArrayList<String> devices = new ArrayList<String>();
  
-		String deviceName = request.getParameter("deviceName");
-		String userId = request.getParameter("userId");
-		System.out.println(deviceName + ";" + userId);
- 
-		Connection connect = DBManager.getConnect();
-		try {
-			Statement statement = connect.createStatement();
-			String sql = "select deviceName from " + DBManager.TABLE_Device + " where deviceName='" + deviceName 
-					+ "'and userId='" + userId +"'";
-			ResultSet result = statement.executeQuery(sql);
-			if (result.next()) { 
-				code = "100";
-				message = "same name is impossible";
-			} else {
-				String sqlInsert = "insert into " + DBManager.TABLE_Device + "(deviceName, userId) values('"
-						+ deviceName + "', '" + userId + "')";
-				if (statement.executeUpdate(sqlInsert) > 0) { 
-					code = "200";
-					message = "add successfully";
-				} else {
-					code = "300";
-					message = "failed";
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
- 
-		response.getWriter().append("code:").append(code).append(";message:").append(message);
+		String userId = request.getParameter("userId");	
+		
+		String printSQL = "SELECT * FROM "+DBManager.TABLE_Device+" where userId='"+userId+"'";
+		System.out.println("connect success");
+		 try {
+			 	connect = DBManager.getConnect();
+			 	statement = connect.createStatement();
+		        ResultSet rs=statement.executeQuery(printSQL);
+		        while(rs.next()){
+		            //Retrieve by column name
+		            String deviceid  = rs.getString("deviceId");
+		            String devicename  = rs.getString("deviceName");
+		            devices.add("{DeviceName:"+deviceid+","+" DeviceId:"+devicename+"}");	
+		        }    
+	            System.out.println(devices.toString()); 
+		    } catch (SQLException e) {
+		        System.out.println(e.getMessage());
+		    } 
+		 
+		
+		response.getWriter().write(devices.toString());
+		response.setHeader("Access-Control-Allow-Origin","*");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Max-Age","3600");
+		System.out.println("sent data");
 
 	}
  
@@ -73,11 +80,7 @@ public class DeviceServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-	@Override
-	public void destroy() {
-		System.out.println("DeviceServlet destory.");
-		super.destroy();
+		doGet(request,response);
+        
 	}
 }
