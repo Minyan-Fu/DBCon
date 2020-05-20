@@ -26,13 +26,13 @@ import com.mysql.cj.xdevapi.Result;
 
 import net.sf.json.JSONObject;
 
-public class showRoutineServlet extends HttpServlet {
+public class addRoutinesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public showRoutineServlet() {
+    public addRoutinesServlet() {
         super();
     }
     
@@ -48,30 +48,32 @@ public class showRoutineServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("do get method start");
 		Connection connect = null;
-	    Statement statement = null;
-	    ArrayList<String> points = new ArrayList<String>();
+	    String code="";
+	    String message="";
  
+	    String routineName= request.getParameter("routineName");
+	    String deviceId= request.getParameter("deviceId");
+	    String userId= request.getParameter("userId");
 		String startTime = request.getParameter("startTime");	
 		String endTime = request.getParameter("endTime"); 
-	       		
-		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where timestamp between '"
-		+startTime+"' and '"+endTime+"' ORDER BY recordId";
-		System.out.println(printSQL);
+		
+		connect = DBManager.getConnect();
 		try {
-			 	connect = DBManager.getConnect();
-			 	statement = connect.createStatement();
-		        ResultSet rs=statement.executeQuery(printSQL);
-		        while(rs.next()){
-		            //Retrieve by column name
-		            String point  = rs.getString("AsText(nowPoint)");
-		            points.add("Point:"+point); 
-		            System.out.println(points);
-		        }              
-		    } catch (SQLException e) {
-		        System.out.println(e.getMessage());
-		    } 
+		Statement statement = connect.createStatement();
+		String sqlInsert = "insert into " + DBManager.TABLE_Routine + "(routineName, deviceId, startTime, endTime, userId) "
+				+ "values('"+ routineName + "', '" + deviceId + "', '" +  startTime + "', '" + endTime + "', '" + userId + "')";
+		if (statement.executeUpdate(sqlInsert) > 0) {
+			code = "200";
+			message = "success";
+		} else {
+			code = "300";
+			message = "falied";
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		 
-		response.getWriter().write(points.toString());
+		response.getWriter().write(message);
 		response.setHeader("Access-Control-Allow-Origin","*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age","3600");

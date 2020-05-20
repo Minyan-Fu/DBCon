@@ -1,5 +1,4 @@
 package com.servlet;
-import java.awt.Point;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -7,11 +6,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -26,13 +22,15 @@ import com.mysql.cj.xdevapi.Result;
 
 import net.sf.json.JSONObject;
 
-public class showRoutineServlet extends HttpServlet {
+
+
+public class pointServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public showRoutineServlet() {
+    public pointServlet() {
         super();
     }
     
@@ -46,44 +44,46 @@ public class showRoutineServlet extends HttpServlet {
 	}
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("do get method start");
 		Connection connect = null;
 	    Statement statement = null;
-	    ArrayList<String> points = new ArrayList<String>();
+	    ArrayList<String> devices = new ArrayList<String>();
  
-		String startTime = request.getParameter("startTime");	
-		String endTime = request.getParameter("endTime"); 
-	       		
-		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where timestamp between '"
-		+startTime+"' and '"+endTime+"' ORDER BY recordId";
-		System.out.println(printSQL);
-		try {
+		String routineId = request.getParameter("routineId");	
+		
+		String printSQL = "SELECT AsText(location),pointId,pointContent FROM "+DBManager.TABLE_Point+" where routineId='"+routineId+"'";
+		System.out.println("connect success");
+		 try {
 			 	connect = DBManager.getConnect();
 			 	statement = connect.createStatement();
+			 	JSONObject object = new JSONObject();
 		        ResultSet rs=statement.executeQuery(printSQL);
 		        while(rs.next()){
 		            //Retrieve by column name
-		            String point  = rs.getString("AsText(nowPoint)");
-		            points.add("Point:"+point); 
-		            System.out.println(points);
-		        }              
+		            String location  = rs.getString("AsText(location)");
+		            String pointId  = rs.getString("pointId");
+		            String pointContent  = rs.getString("pointContent");
+		            object.put("pointId", pointId);
+		            object.put("pointContent", pointContent);
+		            object.put("coordinates", location);
+		            System.out.println(object);
+		        }    
+	            System.out.println(devices.toString()); 
 		    } catch (SQLException e) {
 		        System.out.println(e.getMessage());
 		    } 
 		 
-		response.getWriter().write(points.toString());
+		
+		response.getWriter().write(devices.toString());
 		response.setHeader("Access-Control-Allow-Origin","*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age","3600");
 		System.out.println("sent data");
-
 	}
  
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request,response);
-        
+			doGet(request,response);
 	}
 }

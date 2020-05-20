@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -37,40 +38,38 @@ public class RoutineServlet extends HttpServlet {
 	}
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String code = "";
-		String message = "";
+		String sent ="";
+		String sent2 ="";
+		Connection connect = null;
+	    Statement statement = null;
+	    ArrayList<String> Routines = new ArrayList<String>();
  
-		String routineName = request.getParameter("routineName");
-		String deviceId = request.getParameter("deviceId");
-		String startTime = request.getParameter("startTime");
-		String endTime = request.getParameter("endTime");
-		System.out.println(routineName + ";" + deviceId + ";" + startTime + ";" + endTime);
- 
-		Connection connect = DBManager.getConnect();
-		try {
-			Statement statement = connect.createStatement();
-			String sql = "select routineName from " + DBManager.TABLE_Routine + " where routineName='" + deviceId 
-					+ "'and deviceId='" + deviceId +"'";
-			ResultSet result = statement.executeQuery(sql);
-			if (result.next()) { 
-				code = "100";
-				message = "same name is impossible";
-			} else {
-				String sqlInsert = "insert into " + DBManager.TABLE_Routine + "(routineName, deviceId, startTime, endTime) values('"
-						+ routineName + "', '" + routineName + "', '" + startTime + "', '"+ endTime + "')";
-				if (statement.executeUpdate(sqlInsert) > 0) {
-					code = "200";
-					message = "add successfully";
-				} else {
-					code = "300";
-					message = "failed";
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
- 
-		response.getWriter().append("code:").append(code).append(";message:").append(message);
+		String userId = request.getParameter("userId");	
+		
+		String printSQL = "SELECT * FROM "+DBManager.TABLE_Routine+" where userId='"+userId+"'";
+		System.out.println("connect success");
+		 try {
+			 	connect = DBManager.getConnect();
+			 	statement = connect.createStatement();
+		        ResultSet rs=statement.executeQuery(printSQL);
+		        while(rs.next()){
+		            //Retrieve by column name
+		            String deviceid  = rs.getString("deviceId");
+		            String routineName  = rs.getString("routineName");
+		            String routineId=rs.getString("routineId");
+		            Routines.add("{DeviceId:"+deviceid+","+" RoutineName(Id):"+routineName+"("+routineId+")"+"}");	
+		        }    
+	            System.out.println(Routines.toString()); 
+		    } catch (SQLException e) {
+		        System.out.println(e.getMessage());
+		    } 
+		 
+		
+		response.getWriter().write(Routines.toString());
+		response.setHeader("Access-Control-Allow-Origin","*");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Max-Age","3600");
+		System.out.println("sent data");
 
 	}
  

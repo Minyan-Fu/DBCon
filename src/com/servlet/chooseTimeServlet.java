@@ -26,13 +26,13 @@ import com.mysql.cj.xdevapi.Result;
 
 import net.sf.json.JSONObject;
 
-public class showRoutineServlet extends HttpServlet {
+public class chooseTimeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public showRoutineServlet() {
+    public chooseTimeServlet() {
         super();
     }
     
@@ -49,29 +49,29 @@ public class showRoutineServlet extends HttpServlet {
 		System.out.println("do get method start");
 		Connection connect = null;
 	    Statement statement = null;
-	    ArrayList<String> points = new ArrayList<String>();
+	    ArrayList<String> times = new ArrayList<String>();
  
-		String startTime = request.getParameter("startTime");	
-		String endTime = request.getParameter("endTime"); 
-	       		
-		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where timestamp between '"
-		+startTime+"' and '"+endTime+"' ORDER BY recordId";
+		String routineId = request.getParameter("routineId");	
+		
+		String printSQL = "SELECT startTime,endTime FROM "+DBManager.TABLE_Routine+" where routineId='"+routineId+"'";
 		System.out.println(printSQL);
-		try {
+		 try {
 			 	connect = DBManager.getConnect();
 			 	statement = connect.createStatement();
 		        ResultSet rs=statement.executeQuery(printSQL);
 		        while(rs.next()){
 		            //Retrieve by column name
-		            String point  = rs.getString("AsText(nowPoint)");
-		            points.add("Point:"+point); 
-		            System.out.println(points);
-		        }              
+		            String startTime  = rs.getString("startTime");
+		            String endTime  = rs.getString("endTime");
+		            times.add("{startTime:"+startTime+","+" endTime:"+endTime+"}");	
+		        }    
+	            System.out.println(times.toString()); 
 		    } catch (SQLException e) {
 		        System.out.println(e.getMessage());
 		    } 
 		 
-		response.getWriter().write(points.toString());
+		
+		response.getWriter().write(times.toString());
 		response.setHeader("Access-Control-Allow-Origin","*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age","3600");

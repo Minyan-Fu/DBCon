@@ -26,6 +26,18 @@
   	<servlet-name>showRoutineServlet</servlet-name>
   	<servlet-class>com.servlet.showRoutineServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>addRoutinesServlet</servlet-name>
+  	<servlet-class>com.servlet.addRoutinesServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>chooseTimeServlet</servlet-name>
+  	<servlet-class>com.servlet.chooseTimeServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>pointServlet</servlet-name>
+  	<servlet-class>com.servlet.pointServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
@@ -50,6 +62,18 @@
   <servlet-mapping>
   	<servlet-name>showRoutineServlet</servlet-name>
   	<url-pattern>/showRoutineServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>addRoutinesServlet</servlet-name>
+  	<url-pattern>/addRoutinesServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>chooseTimeServlet</servlet-name>
+  	<url-pattern>/chooseTimeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>pointServlet</servlet-name>
+  	<url-pattern>/pointServlet</url-pattern>
   </servlet-mapping>
   
   
