@@ -38,6 +38,14 @@
   	<servlet-name>pointServlet</servlet-name>
   	<servlet-class>com.servlet.pointServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>addDeviceServlet</servlet-name>
+  	<servlet-class>com.servlet.addDeviceServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>addRecordServlet</servlet-name>
+  	<servlet-class>com.servlet.addRecordServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
@@ -74,6 +82,14 @@
   <servlet-mapping>
   	<servlet-name>pointServlet</servlet-name>
   	<url-pattern>/pointServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>addDeviceServlet</servlet-name>
+  	<url-pattern>/addDeviceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>addRecordServlet</servlet-name>
+  	<url-pattern>/addRecordServlet</url-pattern>
   </servlet-mapping>
   
   

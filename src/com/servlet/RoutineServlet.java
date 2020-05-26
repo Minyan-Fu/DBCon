@@ -79,11 +79,6 @@ public class RoutineServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	@Override
-	public void destroy() {
-		System.out.println("RoutineServlet destory.");
-		super.destroy();
-	}
 
 	
 }

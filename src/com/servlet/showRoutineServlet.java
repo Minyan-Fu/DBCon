@@ -52,11 +52,13 @@ public class showRoutineServlet extends HttpServlet {
 	    ArrayList<String> points = new ArrayList<String>();
  
 		String startTime = request.getParameter("startTime");	
-		String endTime = request.getParameter("endTime"); 
+		String endTime = request.getParameter("endTime");
+		String deviceId= request.getParameter("deviceId");
 	       		
-		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where timestamp between '"
-		+startTime+"' and '"+endTime+"' ORDER BY recordId";
+		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where deviceId='"+deviceId+
+				"' and timestamp between '"+startTime+"' and '"+endTime+"' ORDER BY recordId";
 		System.out.println(printSQL);
+
 		try {
 			 	connect = DBManager.getConnect();
 			 	statement = connect.createStatement();
@@ -76,8 +78,8 @@ public class showRoutineServlet extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age","3600");
 		System.out.println("sent data");
+		}
 
-	}
  
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
