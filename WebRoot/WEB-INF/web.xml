@@ -46,6 +46,14 @@
   	<servlet-name>addRecordServlet</servlet-name>
   	<servlet-class>com.servlet.addRecordServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>addPointServlet</servlet-name>
+  	<servlet-class>com.servlet.addPointServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>showPointsServlet</servlet-name>
+  	<servlet-class>com.servlet.showPointsServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
@@ -90,6 +98,14 @@
   <servlet-mapping>
   	<servlet-name>addRecordServlet</servlet-name>
   	<url-pattern>/addRecordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>addPointServlet</servlet-name>
+  	<url-pattern>/addPointServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>showPointsServlet</servlet-name>
+  	<url-pattern>/showPointsServlet</url-pattern>
   </servlet-mapping>
   
   

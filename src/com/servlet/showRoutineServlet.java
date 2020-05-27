@@ -57,8 +57,6 @@ public class showRoutineServlet extends HttpServlet {
 	       		
 		String printSQL = "SELECT AsText(nowPoint) FROM "+DBManager.TABLE_Record+" where deviceId='"+deviceId+
 				"' and timestamp between '"+startTime+"' and '"+endTime+"' ORDER BY recordId";
-		System.out.println(printSQL);
-
 		try {
 			 	connect = DBManager.getConnect();
 			 	statement = connect.createStatement();
@@ -67,7 +65,6 @@ public class showRoutineServlet extends HttpServlet {
 		            //Retrieve by column name
 		            String point  = rs.getString("AsText(nowPoint)");
 		            points.add("Point:"+point); 
-		            System.out.println(points);
 		        }              
 		    } catch (SQLException e) {
 		        System.out.println(e.getMessage());
