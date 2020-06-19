@@ -57,7 +57,7 @@ public class RegisterServlet extends HttpServlet {
 					message = "success";
 				} else {
 					code = "300";
-					message = "falied";
+					message = "failed";
 				}
 			}
 		} catch (SQLException e) {
